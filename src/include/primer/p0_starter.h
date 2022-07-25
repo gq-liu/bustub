@@ -51,10 +51,10 @@ class Matrix {
 
  public:
   /** @return The number of rows in the matrix */
-  virtual int GetRowCount() const = 0;
+  virtual auto GetRowCount() const -> int = 0;
 
   /** @return The number of columns in the matrix */
-  virtual int GetColumnCount() const = 0;
+  virtual auto GetColumnCount() const -> int = 0;
 
   /**
    * Get the (i,j)th matrix element.
@@ -66,7 +66,7 @@ class Matrix {
    * @return The (i,j)th matrix element
    * @throws OUT_OF_RANGE if either index is out of range
    */
-  virtual T GetElement(int i, int j) const = 0;
+  virtual auto GetElement(int i, int j) const -> T = 0;
 
   /**
    * Set the (i,j)th matrix element.
@@ -127,11 +127,13 @@ class RowMatrix : public Matrix<T> {
    */
   int GetRowCount() const override { return this->rows_; }
 
+
   /**
    * TODO(P0): Add implementation
    * @return The number of columns in the matrix
    */
   int GetColumnCount() const override { return this->cols_; }
+
 
   /**
    * TODO(P0): Add implementation
@@ -150,6 +152,7 @@ class RowMatrix : public Matrix<T> {
       throw Exception(ExceptionType::OUT_OF_RANGE, "RowMatrix::GetElement() out of range");
     }
     return data_[i][j];
+
   }
 
   /**
@@ -225,7 +228,7 @@ class RowMatrixOperations {
    * @param matrixB Input matrix
    * @return The result of matrix addition
    */
-  static std::unique_ptr<RowMatrix<T>> Add(const RowMatrix<T> *matrixA, const RowMatrix<T> *matrixB) {
+  static auto Add(const RowMatrix<T> *matrixA, const RowMatrix<T> *matrixB) -> std::unique_ptr<RowMatrix<T>> {
     // TODO(P0): Add implementation
     if (!matrixA || !matrixB || matrixA->GetColumnCount() != matrixB->GetColumnCount()
        || matrixA->GetRowCount() != matrixB->GetRowCount()) {
@@ -247,7 +250,7 @@ class RowMatrixOperations {
    * @param matrixB Input matrix
    * @return The result of matrix multiplication
    */
-  static std::unique_ptr<RowMatrix<T>> Multiply(const RowMatrix<T> *matrixA, const RowMatrix<T> *matrixB) {
+  static auto Multiply(const RowMatrix<T> *matrixA, const RowMatrix<T> *matrixB) -> std::unique_ptr<RowMatrix<T>> {
     // TODO(P0): Add implementation
     if (!matrixA || !matrixB || matrixA->GetColumnCount() != matrixB->GetRowCount()) {
       return std::unique_ptr<RowMatrix<T>>(nullptr);
@@ -273,8 +276,8 @@ class RowMatrixOperations {
    * @param matrixC Input matrix
    * @return The result of general matrix multiply
    */
-  static std::unique_ptr<RowMatrix<T>> GEMM(const RowMatrix<T> *matrixA, const RowMatrix<T> *matrixB,
-                                            const RowMatrix<T> *matrixC) {
+  static auto GEMM(const RowMatrix<T> *matrixA, const RowMatrix<T> *matrixB, const RowMatrix<T> *matrixC)
+      -> std::unique_ptr<RowMatrix<T>> {
     // TODO(P0): Add implementation
     return Add(Multiply(matrixA, matrixB), matrixC);
   }
