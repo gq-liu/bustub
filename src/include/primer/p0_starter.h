@@ -146,7 +146,7 @@ class RowMatrix : public Matrix<T> {
    * @throws OUT_OF_RANGE if either index is out of range
    */
   T GetElement(int i, int j) const override {
-    if (i < 0 || i >= this->GetRowCount() || j < 0 || j >= this->GetColumnCount()) {
+    if (i < 0 || i >= this->rows_ || j < 0 || j >= this->cols_) {
       throw Exception(ExceptionType::OUT_OF_RANGE, "RowMatrix::GetElement() out of range");
     }
     return data_[i][j];
@@ -163,7 +163,7 @@ class RowMatrix : public Matrix<T> {
    * @throws OUT_OF_RANGE if either index is out of range
    */
   void SetElement(int i, int j, T val) override {
-    if (i < 0 || i >= this->GetRowCount() || j < 0 || j >= this->GetColumnCount()) {
+    if (i < 0 || i >= this->rows_ || j < 0 || j >= this->cols_) {
       throw Exception(ExceptionType::OUT_OF_RANGE, "RowMatrix::SetElement() out of range");
     }
     data_[i][j] = val;
@@ -181,12 +181,12 @@ class RowMatrix : public Matrix<T> {
    * @throws OUT_OF_RANGE if `source` is incorrect size
    */
   void FillFrom(const std::vector<T> &source) override {
-    if ((int) source.size() != this->GetColumnCount() * this->GetRowCount()) {
+    if (static_cast<int>(source.size()) != this->cols_ * this->rows_) {
       throw Exception(ExceptionType::OUT_OF_RANGE, "RowMatrix::FillFrom() out of range");
     }
     int ind = 0;
-    for (int i = 0; i < this->GetRowCount(); i++) {
-      for (int j = 0; j < this->GetColumnCount(); j++) {
+    for (int i = 0; i < this->rows_; i++) {
+      for (int j = 0; j < this->cols_; j++) {
         data_[i][j] = source[ind++];
       }
     }
@@ -227,7 +227,8 @@ class RowMatrixOperations {
    */
   static std::unique_ptr<RowMatrix<T>> Add(const RowMatrix<T> *matrixA, const RowMatrix<T> *matrixB) {
     // TODO(P0): Add implementation
-    if (!matrixA || !matrixB ||matrixA->GetColumnCount() != matrixB->GetColumnCount() || matrixA->GetRowCount() != matrixB->GetRowCount()) {
+    if (!matrixA || !matrixB || matrixA->GetColumnCount() != matrixB->GetColumnCount()
+       || matrixA->GetRowCount() != matrixB->GetRowCount()) {
       return std::unique_ptr<RowMatrix<T>>(nullptr);
     }
     RowMatrix<T> *res = new RowMatrix<T>(matrixA->GetRowCount(), matrixA->GetColumnCount());
