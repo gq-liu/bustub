@@ -95,9 +95,7 @@ class Matrix {
    * Destroy a matrix instance.
    * TODO(P0): Add implementation
    */
-  virtual ~Matrix() {
-    delete[] linear_;
-  }
+  virtual ~Matrix() { delete[] linear_; }
 };
 
 /**
@@ -115,7 +113,7 @@ class RowMatrix : public Matrix<T> {
    * @param cols The number of columns
    */
   RowMatrix(int rows, int cols) : Matrix<T>(rows, cols) {
-    data_ = new T* [rows];
+    data_ = new T *[rows];
     for (auto i = 0; i < rows; i++) {
       data_[i] = &this->linear_[i * cols];
     }
@@ -127,13 +125,11 @@ class RowMatrix : public Matrix<T> {
    */
   int GetRowCount() const override { return this->rows_; }
 
-
   /**
    * TODO(P0): Add implementation
    * @return The number of columns in the matrix
    */
   int GetColumnCount() const override { return this->cols_; }
-
 
   /**
    * TODO(P0): Add implementation
@@ -152,7 +148,6 @@ class RowMatrix : public Matrix<T> {
       throw Exception(ExceptionType::OUT_OF_RANGE, "RowMatrix::GetElement() out of range");
     }
     return data_[i][j];
-
   }
 
   /**
@@ -200,7 +195,7 @@ class RowMatrix : public Matrix<T> {
    *
    * Destroy a RowMatrix instance.
    */
-  ~RowMatrix() {delete[] data_; }
+  ~RowMatrix() { delete[] data_; }
 
  private:
   /**
@@ -230,8 +225,8 @@ class RowMatrixOperations {
    */
   static auto Add(const RowMatrix<T> *matrixA, const RowMatrix<T> *matrixB) -> std::unique_ptr<RowMatrix<T>> {
     // TODO(P0): Add implementation
-    if (!matrixA || !matrixB || matrixA->GetColumnCount() != matrixB->GetColumnCount()
-       || matrixA->GetRowCount() != matrixB->GetRowCount()) {
+    if (!matrixA || !matrixB || matrixA->GetColumnCount() != matrixB->GetColumnCount() ||
+        matrixA->GetRowCount() != matrixB->GetRowCount()) {
       return std::unique_ptr<RowMatrix<T>>(nullptr);
     }
     RowMatrix<T> *res = new RowMatrix<T>(matrixA->GetRowCount(), matrixA->GetColumnCount());
