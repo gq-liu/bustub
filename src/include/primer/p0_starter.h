@@ -195,7 +195,7 @@ class RowMatrix : public Matrix<T> {
    *
    * Destroy a RowMatrix instance.
    */
-  ~RowMatrix() { delete[] data_; }
+  ~RowMatrix() override { delete[] data_; }
 
  private:
   /**
@@ -229,7 +229,7 @@ class RowMatrixOperations {
         matrixA->GetRowCount() != matrixB->GetRowCount()) {
       return std::unique_ptr<RowMatrix<T>>(nullptr);
     }
-    RowMatrix<T> *res = new RowMatrix<T>(matrixA->GetRowCount(), matrixA->GetColumnCount());
+    auto *res = new RowMatrix<T>(matrixA->GetRowCount(), matrixA->GetColumnCount());
     for (auto i = 0; i < matrixA->GetRowCount(); i++) {
       for (auto j = 0; j < matrixA->GetColumnCount(); j++) {
         res->SetElement(i, j, matrixA->GetElement(i, j) + matrixB->GetElement(i, j));
